@@ -1,0 +1,31 @@
+name: Build APK
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+          channel: 'stable'
+      - name: Setup Project Structure
+        run: |
+          flutter create --org com.admin.app --project-name admin_app temp_app
+          cp -r temp_app/android ./android
+          cp -r temp_app/ios ./ios 2>/dev/null || true
+          cp temp_app/.gitignore ./.gitignore 2>/dev/null || true
+          mkdir -p lib
+          cp main.dart lib/main.dart
+          rm -rf temp_app
+      - name: Get Packages
+        run: flutter pub get
+      - name: Build APK
+        run: flutter build apk --release
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-app-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
