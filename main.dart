@@ -8,7 +8,9 @@ const String kAdminPhone = '+8801625287338';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp().timeout(Duration(seconds: 5));
+  } catch (_) {}
   runApp(const MyAdminApp());
 }
 
