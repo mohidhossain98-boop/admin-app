@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 const String kAdminPhone = '+8801625287338';
+const String kAdminEmail = 'mohidhossain98@gmail.com';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,8 +64,10 @@ class AdminAuthGate extends StatelessWidget {
           return const AdminLoginPage();
         }
 
-        final signedInPhone = _normalizePhone(user.phoneNumber ?? '');
-        if (signedInPhone != kAdminPhone) {
+      final signedInPhone = _normalizePhone(user.phoneNumber ?? '');
+final isAdmin = user.email == kAdminEmail || signedInPhone == kAdminPhone;
+if (!isAdmin) {
+    
           return Scaffold(
             backgroundColor: Colors.white,
             body: Center(
