@@ -12,9 +12,10 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
+      - name: Create Android project
+        run: flutter create . --project-name admin_app --org com.example.adminapp
       - name: Setup project structure
         run: |
-          mkdir -p lib android/app
           cp main.dart lib/main.dart
           cp google-services.json android/app/google-services.json
           ls -l lib/main.dart android/app/google-services.json
