@@ -37,7 +37,7 @@ class MyAdminApp extends StatelessWidget {
           centerTitle: false,
         ),
       ),
-      home: const AdminAuthGate(),
+home: const AdminLoginPage(),
     );
   }
 }
