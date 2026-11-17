@@ -207,10 +207,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         _startResendTimer();
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        _verificationId = verificationId;
-      },
-    );
-  }
+  _verificationId = verificationId;
+  setState(() { _isLoading = false; });
+},
+);
+}
+
 
   Future<void> _verifyOtp() async {
     final otp = _otpController.text.trim();
