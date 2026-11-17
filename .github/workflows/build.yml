@@ -3,39 +3,24 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
+          flutter-version: '3.24.0'
           channel: 'stable'
-          cache: true
-      - name: Setup Project Structure
+      - name: Setup project structure
         run: |
-          flutter create --org com.admin.app --project-name admin_app temp_app
-          cp -r temp_app/android ./android
-          cp -r temp_app/ios ./ios 2>/dev/null || true
-          cp temp_app/.gitignore ./.gitignore 2>/dev/null || true
-          mkdir -p lib
+          mkdir -p lib android/app
           cp main.dart lib/main.dart
-          rm -rf temp_app
-      - name: Copy google-services.json
-        run: |
-          if [ -f google-services.json ]; then cp google-services.json android/app/google-services.json; echo "copied"; else echo "MISSING google-services.json"; exit 1; fi
-      - name: Get Packages
-        run: flutter pub get
-      - name: Build APK
-        run: flutter build apk --release
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+          cp google-services.json android/app/google-services.json
+          ls -l lib/main.dart android/app/google-services.json
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
         with:
-          name: admin-app-apk
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
