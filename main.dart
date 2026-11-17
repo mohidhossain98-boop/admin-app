@@ -172,7 +172,14 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       _isLoading = true;
       _errorMessage = null;
     });
-
+Future.delayed(const Duration(seconds: 10), () {
+  if (mounted && _isLoading && !_codeSent) {
+    setState(() {
+      _isLoading = false;
+      _errorMessage = 'OTP Timeout. Firebase Phone Auth OFF / SHA-1 missing. Check Firebase Console.';
+    });
+  }
+});
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: kAdminPhone,
       forceResendingToken: isResend ? _resendToken : null,
